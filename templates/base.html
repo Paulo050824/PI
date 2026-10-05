@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Silverio Tattoo.ink
+        {% endblock %}
+    </title>
+
+    <link
+        
+        rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    {% block css %}{% endblock %}
+
+</head>
+
+<body>
+
+    <header class="header">
+
+        <a href="{{ url_for('painel') }}" class="logo">
+
+
+            <i class="fa-solid fa-pen-nib"></i>
+
+            <span>Silverio tattoo.ink</span>
+
+        </a>
+
+        <nav class="nav">
+
+            <a href="{{ url_for('painel') }}">
+                Início
+            </a>
+
+            <a href="{{ url_for('tatuagens') }}">
+                Trabalhos
+            </a>
+
+            {% if session.get('id_usuario') %}
+
+                <a href="{{ url_for('painel') }}">
+                    Painel
+                </a>
+
+                <a href="{{ url_for('logout') }}">
+                    Sair
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+                <a href="{{ url_for('cadastro') }}">
+                    Cadastro
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        {% with mensagens = get_flashed_messages() %}
+
+            {% if mensagens %}
+
+                <div class="mensagens">
+
+                    {% for mensagem in mensagens %}
+
+                        <p>{{ mensagem }}</p>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <footer class="footer">
+
+        <div>
+
+            <h3>
+                Silverio tattoo.ink
+            </h3>
+
+            <p>
+                Arte, estilo e personalidade.
+            </p>
+
+        </div>
+
+        <div class="social">
+
+            <a
+                href="https://www.instagram.com/silverio_tattooink"
+                target="_blank"
+            >
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a
+                href="#"
+                target="_blank"
+            >
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+
+        </div>
+
+        <p class="copyright">
+            © 2026 Silverio tattoo.ink
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Tatuagens - Silverio Tattoo.ink
+{% endblock %}
+
+{% block content %}
+
+<section class="tatuagens-page">
+
+    <div class="titulo-pagina">
+
+        <h1>
+            Nossos trabalhos
+        </h1>
+
+        <p>
+            Confira algumas das tatuagens realizadas
+            pelo Silverio Tattoo.ink.
+        </p>
+
+    </div>
+
+
+    {% if tatuagens %}
+
+        <div class="tatuagens-grid">
+
+            {% for tatuagem in tatuagens %}
+
+                <article class="tatuagem-card">
+
+                    {% if tatuagem.imagem %}
+
+                        <img
+                            src="{{ url_for('static', filename='img/' ~ tatuagem.imagem) }}"
+                            alt="{{ tatuagem.titulo }}"
+                        >
+
+                    {% else %}
+
+                        <div class="sem-imagem">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="tatuagem-info">
+
+                        <h2>
+                            {{ tatuagem.titulo }}
+                        </h2>
+
+                        {% if tatuagem.descricao %}
+
+                            <p>
+                                {{ tatuagem.descricao }}
+                            </p>
+
+                        {% endif %}
+
+                        {% if tatuagem.categoria %}
+
+                            <span class="categoria">
+                                {{ tatuagem.categoria }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="nenhuma-tatuagem">
+
+            <i class="fa-solid fa-pen-nib"></i>
+
+            <h2>
+                Nenhuma tatuagem cadastrada
+            </h2>
+
+            <p>
+                Em breve teremos novos trabalhos para você conferir.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

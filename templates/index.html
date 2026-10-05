@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Silverio Tattoo.ink
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>
+            Silverio Tattoo.ink
+        </h1>
+
+        <h2>
+            Arte, estilo e personalidade.
+        </h2>
+
+        <p>
+            Transforme suas ideias em arte através da tatuagem.
+            Confira nossos trabalhos e conheça nosso estúdio.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('tatuagens') }}" class="btn">
+                Ver tatuagens
+            </a>
+
+            {% if session.get('id_usuario') %}
+
+                <a href="{{ url_for('painel') }}" class="btn secundario">
+                    Meu painel
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('cadastro') }}" class="btn secundario">
+                    Criar conta
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="sobre">
+
+    <h2>Sobre nós</h2>
+
+    <p>
+        Bem-vindo ao Silverio Tattoo.ink.
+        Trabalhamos com tatuagens personalizadas,
+        buscando transformar cada ideia em uma arte única.
+    </p>
+
+</section>
+
+
+<section class="destaques">
+
+    <h2>Nossos trabalhos</h2>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <i class="fa-solid fa-pen-nib"></i>
+
+            <h3>Tatuagens personalizadas</h3>
+
+            <p>
+                Criamos artes exclusivas de acordo
+                com o estilo e personalidade de cada cliente.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-palette"></i>
+
+            <h3>Arte e criatividade</h3>
+
+            <p>
+                Cada tatuagem é pensada para se
+                tornar uma peça única.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <i class="fa-solid fa-heart"></i>
+
+            <h3>Dedicação</h3>
+
+            <p>
+                Nosso objetivo é proporcionar uma
+                experiência especial para cada cliente.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

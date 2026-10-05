@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+
+{% block titulo %} Avaliações do {{tatuagem.nome}} - Silerio tatto.ink {% endblock%}
+
+{% block conteudo %}
+    <h2>Avaliações de {{tatuagem.nome}}</h2>
+    <p>Média geral: <strong>{{ tatuagem.media_avaliacoes}}</strong></p>
+
+    {% if tatuagem.avaliacoes%}
+    <ul>
+        {% for avaliacao in tatuagem.avaliacoes %}
+        <li>{{avaliacao}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Esta Tatuagem ainda não possui avaliacoes.</p>
+    {% endif %}
+
+    <p><a href="{{url_for('avaliar_tatuagem', id_tatuagem = tatuagens.id)}}"></a></p>
+    <p><a href="{{url_for('listar_cardapio', id_tatuagem = tatuagens.id)}}"></a></p>
+    {% endblock %}
