@@ -1,5 +1,5 @@
 from banco.db import conectar
-from modelos.tatuagem import Tatuagem
+from models.tatuagens.tatuagem import Tatuagem
 
 
 def _linha_para_tatuagem(linha):
