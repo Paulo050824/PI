@@ -7,24 +7,20 @@ def criar_tabela_usuarios():
     cursor = conexao.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuario(
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nome VARCHAR(150) NOT NULL,
-            email VARCHAR(254) NOT NULL UNIQUE,
-            senha_hash VARCHAR(254) NOT NULL,
-            is_admin TINYINT(1) NOT NULL DEFAULT 0
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            senha_hash TEXT NOT NULL,
+            is_admin INTEGER NOT NULL DEFAULT 0
         )
     """)
 
     # Se a tabela já existia sem a coluna is_admin, adiciona
-    cursor.execute("""
-        SELECT COUNT(*) FROM information_schema.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE()
-          AND TABLE_NAME = 'usuario'
-          AND COLUMN_NAME = 'is_admin'
-    """)
-    if cursor.fetchone()[0] == 0:
+    cursor.execute("PRAGMA table_info(usuario)")
+    colunas = [linha[1] for linha in cursor.fetchall()]
+    if "is_admin" not in colunas:
         cursor.execute(
-            "ALTER TABLE usuario ADD COLUMN is_admin TINYINT(1) NOT NULL DEFAULT 0"
+            "ALTER TABLE usuario ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0"
         )
 
     conexao.commit()
@@ -38,7 +34,7 @@ def criar_usuario(usuario):
     cursor.execute(
         """
         INSERT INTO usuario(nome, email, senha_hash)
-        VALUES (%s, %s, %s)
+        VALUES (?, ?, ?)
         """,
         (usuario.nome, usuario.email, usuario.senha_hash)
     )
@@ -59,7 +55,7 @@ def buscar_por_email(email):
     conexao = conectar()
     cursor = conexao.cursor()
     cursor.execute(
-        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE email = %s",
+        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE email = ?",
         (email,)
     )
     resultado = cursor.fetchone()
@@ -72,7 +68,7 @@ def buscar_por_id(id_usuario):
     conexao = conectar()
     cursor = conexao.cursor()
     cursor.execute(
-        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE id = %s",
+        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE id = ?",
         (id_usuario,)
     )
     resultado = cursor.fetchone()

@@ -18,11 +18,11 @@ def criar_tabela_tatuagens():
 
     sql = """
         CREATE TABLE IF NOT EXISTS tatuagens (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            nome VARCHAR(100) NOT NULL,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
             descricao TEXT,
-            preco DECIMAL(10,2),
-            imagem VARCHAR(255)
+            preco REAL,
+            imagem TEXT
         )
     """
 
@@ -37,7 +37,7 @@ def criar_tatuagem(tatuagem):
 
     sql = """
         INSERT INTO tatuagens (nome, descricao, preco, imagem)
-        VALUES (%s, %s, %s, %s)
+        VALUES (?, ?, ?, ?)
     """
 
     cursor.execute(sql, (
@@ -74,7 +74,7 @@ def buscar_tatuagem(tatuagem_id):
     cursor.execute("""
         SELECT id, nome, descricao, preco, imagem
         FROM tatuagens
-        WHERE id = %s
+        WHERE id = ?
     """, (tatuagem_id,))
 
     linha = cursor.fetchone()

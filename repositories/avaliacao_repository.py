@@ -8,10 +8,10 @@ def criar_tabela_avaliacoes():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS avaliacoes (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            id_tatuagem INT NOT NULL,
-            cliente VARCHAR(150) NOT NULL,
-            nota DECIMAL(3,1) NOT NULL,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_tatuagem INTEGER NOT NULL,
+            cliente TEXT NOT NULL,
+            nota REAL NOT NULL,
 
             FOREIGN KEY (id_tatuagem)
             REFERENCES tatuagem(id)
@@ -27,10 +27,9 @@ def criar_avaliacao(id_tatuagem, avaliacao):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # Corrigido: 'nome' alterado para 'cliente'
     cursor.execute("""
         INSERT INTO avaliacoes (id_tatuagem, cliente, nota)
-        VALUES (%s, %s, %s)
+        VALUES (?, ?, ?)
     """, (id_tatuagem, avaliacao.cliente, avaliacao.nota))
 
     conexao.commit()
@@ -42,7 +41,6 @@ def listar_avaliacoes():
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # Corrigido: 'nome' alterado para 'cliente'
     cursor.execute("""
         SELECT cliente, nota
         FROM avaliacoes
@@ -62,11 +60,10 @@ def listar_avaliacoes_por_tatuagem(id_tatuagem):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # Corrigido: 'nome' alterado para 'cliente'
     cursor.execute("""
         SELECT cliente, nota
         FROM avaliacoes
-        WHERE id_tatuagem = %s
+        WHERE id_tatuagem = ?
     """, (id_tatuagem,))
 
     resultado = cursor.fetchall()
@@ -83,11 +80,10 @@ def listar_completo(id_tatuagem):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    # Corrigido: 'nome' alterado para 'cliente'
     cursor.execute("""
         SELECT id, id_tatuagem, cliente, nota
         FROM avaliacoes
-        WHERE id_tatuagem = %s
+        WHERE id_tatuagem = ?
     """, (id_tatuagem,))
 
     resultado = cursor.fetchall()
@@ -106,7 +102,7 @@ def remover_avaliacao(id_avaliacao):
 
     cursor.execute("""
         DELETE FROM avaliacoes
-        WHERE id = %s
+        WHERE id = ?
     """, (id_avaliacao,))
 
     conexao.commit()
@@ -121,7 +117,7 @@ def remover_avaliacoes_por_tatuagem(id_tatuagem):
 
     cursor.execute("""
         DELETE FROM avaliacoes
-        WHERE id_tatuagem = %s
+        WHERE id_tatuagem = ?
     """, (id_tatuagem,))
 
     conexao.commit()
