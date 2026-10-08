@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ tatuagem.nome }} - Silverio Tattoo.ink
+{% endblock %}
+
+{% block content %}
+<section class="tatuagens-page">
+
+    <div class="titulo-pagina">
+        <h1>{{ tatuagem.nome }}</h1>
+        <p>Confira os detalhes e o valor deste trabalho.</p>
+    </div>
+
+    <article class="tatuagem-card tatuagem-detalhe">
+
+        {% if tatuagem.imagem %}
+            <img src="{{ url_for('static', filename='img/' ~ tatuagem.imagem) }}"
+                 alt="{{ tatuagem.nome }}">
+        {% else %}
+            <div class="sem-imagem">
+                <i class="fa-solid fa-image"></i>
+            </div>
+        {% endif %}
+
+        <div class="tatuagem-info">
+            <h2>{{ tatuagem.nome }}</h2>
+
+            {% if tatuagem.descricao %}
+                <p>{{ tatuagem.descricao }}</p>
+            {% endif %}
+
+            {% if tatuagem.preco is not none %}
+                <span class="preco">
+                    R$ {{ '%.2f'|format(tatuagem.preco)|replace('.', ',') }}
+                </span>
+            {% else %}
+                <span class="preco">Sob consulta</span>
+            {% endif %}
+        </div>
+
+    </article>
+
+    <p>
+        <a href="{{ url_for('tatuagens') }}" class="btn secundario">
+            Voltar para Tatuagens
+        </a>
+    </p>
+
+</section>
+{% endblock %}

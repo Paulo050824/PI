@@ -19,6 +19,18 @@ body {
     color: #f5f5f5;
     line-height: 1.6;
     min-height: 100vh;
+
+    /* Mantém o rodapé sempre no fim da tela */
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+img {
+    max-width: 100%;
 }
 
 /* =========================================================
@@ -41,35 +53,26 @@ a:hover {
 .header {
     width: 100%;
     min-height: 75px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 12px 6%;
-
     background: #111;
     border-bottom: 1px solid #2a2a2a;
-
     position: sticky;
     top: 0;
     z-index: 1000;
-
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
 }
-
-/* Logo */
 
 .logo {
     display: flex;
     align-items: center;
     gap: 12px;
-
     color: #fff;
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 1px;
-
     transition: 0.3s;
 }
 
@@ -98,14 +101,10 @@ a:hover {
 
 .nav a {
     color: #ddd;
-
     font-size: 15px;
     font-weight: 500;
-
     padding: 8px 0;
-
     position: relative;
-
     transition: 0.3s;
 }
 
@@ -113,20 +112,14 @@ a:hover {
     color: #d4af37;
 }
 
-/* Linha abaixo do menu */
-
 .nav a::after {
     content: "";
-
     position: absolute;
     left: 0;
     bottom: 0;
-
     width: 0;
     height: 2px;
-
     background: #d4af37;
-
     transition: width 0.3s;
 }
 
@@ -135,19 +128,14 @@ a:hover {
 }
 
 /* =========================================================
-   CONTAINER
+   CONTAINER E TÍTULOS
    ========================================================= */
 
 .container {
     width: 90%;
     max-width: 1200px;
-
     margin: 40px auto;
 }
-
-/* =========================================================
-   TÍTULOS
-   ========================================================= */
 
 h1,
 h2,
@@ -169,54 +157,23 @@ h3 {
     font-size: 21px;
 }
 
-.titulo {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.titulo span {
-    color: #d4af37;
-}
-
 /* =========================================================
-   HERO / INÍCIO
+   MENSAGENS FLASH DO FLASK
    ========================================================= */
 
-.hero {
-    min-height: 70vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 80px 20px;
-
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.70),
-            rgba(0, 0, 0, 0.85)
-        ),
-        url("/static/img/tattoo-studio.png");
-
-    background-size: cover;
-    background-position: center;
-}
-
-.hero-content {
+.mensagens {
+    width: 90%;
     max-width: 800px;
+    margin: 20px auto 0;
 }
 
-.hero h1 {
-    font-size: 55px;
-    margin-bottom: 15px;
-}
-
-.hero p {
-    font-size: 19px;
-    color: #ccc;
-    margin-bottom: 30px;
+.mensagens p {
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    background: #222;
+    border-left: 4px solid #d4af37;
+    color: #fff;
 }
 
 /* =========================================================
@@ -225,20 +182,13 @@ h3 {
 
 .btn {
     display: inline-block;
-
     padding: 12px 25px;
-
     border-radius: 5px;
-
     background: #d4af37;
     color: #111;
-
     font-weight: bold;
-
     border: 1px solid #d4af37;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
@@ -247,52 +197,120 @@ h3 {
     color: #d4af37;
 }
 
-.btn-secondary {
+.btn.secundario {
     background: transparent;
     color: #d4af37;
 }
 
-.btn-secondary:hover {
+.btn.secundario:hover {
     background: #d4af37;
     color: #111;
 }
 
 /* =========================================================
-   CARDS
+   HERO / INÍCIO
+   ========================================================= */
+
+.hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.70), rgba(0, 0, 0, 0.85)),
+        url("/static/img/tattoo-studio.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-text {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.hero h2 {
+    font-size: 24px;
+    font-weight: normal;
+    color: #d4af37;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 19px;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* =========================================================
+   SOBRE / DESTAQUES
+   ========================================================= */
+
+.sobre,
+.destaques {
+    width: 90%;
+    max-width: 1100px;
+    margin: 70px auto 0;
+    text-align: center;
+}
+
+.sobre h2,
+.destaques h2 {
+    display: inline-block;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #d4af37;
+}
+
+.sobre p {
+    color: #bbb;
+    font-size: 17px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   CARDS (PÁGINA INICIAL)
    ========================================================= */
 
 .cards {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(250px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 25px;
-
     margin-top: 30px;
 }
 
 .card {
     background: #171717;
-
     border: 1px solid #292929;
-
     border-radius: 10px;
-
     padding: 25px;
-
     transition: 0.3s;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
 }
 
 .card:hover {
     transform: translateY(-5px);
-
     border-color: #d4af37;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
+}
 
-    box-shadow:
-        0 10px 30px rgba(212, 175, 55, 0.12);
+.card i {
+    display: block;
+    font-size: 34px;
+    color: #d4af37;
+    margin-bottom: 15px;
 }
 
 .card h3 {
@@ -304,82 +322,21 @@ h3 {
 }
 
 /* =========================================================
-   GALERIA DE TATUAGENS
+   FORMULÁRIOS (CAMPOS E BOTÃO)
    ========================================================= */
-
-.galeria {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(230px, 1fr));
-
-    gap: 20px;
-}
-
-.galeria img {
-    width: 100%;
-    height: 280px;
-
-    object-fit: cover;
-
-    border-radius: 8px;
-
-    border: 1px solid #292929;
-
-    transition: 0.4s;
-}
-
-.galeria img:hover {
-    transform: scale(1.03);
-
-    border-color: #d4af37;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.6);
-}
-
-/* =========================================================
-   FORMULÁRIOS
-   ========================================================= */
-
-.form-container {
-    width: 100%;
-    max-width: 550px;
-
-    margin: 50px auto;
-
-    padding: 35px;
-
-    background: #171717;
-
-    border: 1px solid #292929;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-.form-container h1,
-.form-container h2 {
-    text-align: center;
-}
 
 form {
     width: 100%;
 }
 
-.form-group {
+.campo {
     margin-bottom: 18px;
 }
 
 label {
     display: block;
-
     margin-bottom: 7px;
-
     color: #ddd;
-
     font-weight: bold;
 }
 
@@ -387,21 +344,14 @@ input,
 textarea,
 select {
     width: 100%;
-
     padding: 12px 14px;
-
     border-radius: 5px;
-
     border: 1px solid #3a3a3a;
-
     background: #0f0f0f;
-
     color: #fff;
-
     font-size: 15px;
-
+    font-family: inherit;
     outline: none;
-
     transition: 0.3s;
 }
 
@@ -409,9 +359,7 @@ input:focus,
 textarea:focus,
 select:focus {
     border-color: #d4af37;
-
-    box-shadow:
-        0 0 0 2px rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
 }
 
 textarea {
@@ -424,36 +372,38 @@ textarea::placeholder {
     color: #777;
 }
 
-/* =========================================================
-   BOTÃO DO FORMULÁRIO
-   ========================================================= */
-
 button,
 input[type="submit"] {
     width: 100%;
-
     padding: 12px;
-
     border: none;
     border-radius: 5px;
-
     background: #d4af37;
-
     color: #111;
-
     font-size: 16px;
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
 button:hover,
 input[type="submit"]:hover {
     background: #b8941f;
-
     transform: translateY(-1px);
+}
+
+/* Mensagem de erro dos formulários */
+
+.erro,
+.login-container .erro,
+.cadastro-box .erro {
+    margin: 0 0 18px;
+    padding: 10px 14px;
+    border-radius: 5px;
+    border-left: 4px solid #dc3545;
+    background: rgba(220, 53, 69, 0.12);
+    color: #ff8d98;
+    text-align: left;
 }
 
 /* =========================================================
@@ -463,22 +413,16 @@ input[type="submit"]:hover {
 .login-container {
     width: 100%;
     max-width: 420px;
-
     margin: 70px auto;
-
     padding: 35px;
-
     background: #171717;
-
     border-radius: 10px;
-
     border: 1px solid #292929;
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
 }
 
-.login-container h1 {
+.login-container h2 {
+    text-align: center;
     font-size: 30px;
     margin-bottom: 30px;
 }
@@ -486,7 +430,6 @@ input[type="submit"]:hover {
 .login-container p {
     text-align: center;
     color: #aaa;
-
     margin-top: 20px;
 }
 
@@ -495,121 +438,280 @@ input[type="submit"]:hover {
 }
 
 /* =========================================================
+   CADASTRO (CONTA E NOVA TATUAGEM)
+   ========================================================= */
+
+.cadastro-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+.cadastro-box {
+    width: 100%;
+    max-width: 550px;
+    padding: 35px;
+    background: #171717;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.cadastro-box h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.cadastro-box > p {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+.login-link {
+    margin-top: 22px;
+    text-align: center;
+    color: #aaa;
+}
+
+.login-link a {
+    color: #d4af37;
+}
+
+/* =========================================================
    PAINEL
    ========================================================= */
 
-.painel {
+.painel-page {
     width: 90%;
     max-width: 1200px;
-
     margin: 40px auto;
 }
 
 .painel-header {
     display: flex;
-
     justify-content: space-between;
     align-items: center;
-
+    gap: 20px;
     margin-bottom: 30px;
+}
+
+.painel-header h1 {
+    text-align: left;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.painel-header p {
+    color: #aaa;
+}
+
+.btn-sair {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+    color: #d4af37;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-sair:hover {
+    background: #d4af37;
+    color: #111;
 }
 
 .painel-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(220px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
 }
 
 .painel-card {
     padding: 25px;
-
     background: #171717;
-
     border: 1px solid #292929;
-
     border-radius: 10px;
+    transition: 0.3s;
 }
 
-.painel-card .numero {
+.painel-card:hover {
+    transform: translateY(-4px);
+    border-color: #d4af37;
+}
+
+.painel-card i {
     display: block;
-
-    font-size: 35px;
-    font-weight: bold;
-
+    font-size: 30px;
     color: #d4af37;
+    margin-bottom: 12px;
+}
 
-    margin-bottom: 5px;
+.painel-card h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.painel-card p {
+    color: #bbb;
+    margin-bottom: 8px;
+}
+
+.painel-card strong {
+    color: #fff;
+}
+
+.painel-card .btn {
+    margin-top: 12px;
+}
+
+/* =========================================================
+   TATUAGENS (LISTAGEM)
+   ========================================================= */
+
+.tatuagens-page {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.titulo-pagina {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.titulo-pagina p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #aaa;
+}
+
+.tatuagens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.tatuagem-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #171717;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.tatuagem-card:hover {
+    transform: translateY(-5px);
+    border-color: #d4af37;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.12);
+}
+
+.tatuagem-card img {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sem-imagem {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f0f;
+    color: #444;
+    font-size: 48px;
+}
+
+.tatuagem-info {
+    padding: 20px;
+}
+
+.tatuagem-info h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.tatuagem-info p {
+    color: #bbb;
+    margin-bottom: 15px;
+}
+
+.categoria {
+    display: inline-block;
+    margin: 0 6px 12px 0;
+    padding: 4px 12px;
+    border: 1px solid #d4af37;
+    border-radius: 20px;
+    color: #d4af37;
+    font-size: 13px;
+}
+
+.tatuagem-info .btn {
+    margin: 6px 6px 0 0;
+    padding: 9px 18px;
+    font-size: 14px;
+}
+
+.nenhuma-tatuagem {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+}
+
+.nenhuma-tatuagem i {
+    font-size: 50px;
+    color: #d4af37;
+    margin-bottom: 20px;
+}
+
+.nenhuma-tatuagem h2 {
+    color: #ddd;
 }
 
 /* =========================================================
    AVALIAÇÕES
    ========================================================= */
 
-.avaliacoes {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(280px, 1fr));
-
-    gap: 20px;
-}
-
-.avaliacao {
-    padding: 25px;
-
+.avaliacao-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 35px;
     background: #171717;
-
-    border-radius: 10px;
-
     border: 1px solid #292929;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.avaliacao .estrelas {
-    color: #d4af37;
-
-    font-size: 20px;
-
-    margin-bottom: 10px;
+.avaliacao-container ul {
+    list-style: none;
+    margin-bottom: 25px;
 }
 
-.avaliacao p {
+.avaliacao-container li {
+    padding: 12px 0;
+    border-bottom: 1px solid #292929;
     color: #ccc;
 }
 
-/* =========================================================
-   MENSAGENS FLASH DO FLASK
-   ========================================================= */
-
-.flash {
-    width: 90%;
-    max-width: 800px;
-
-    margin: 20px auto;
-
-    padding: 14px 18px;
-
-    border-radius: 5px;
-
-    background: #222;
-
-    border-left: 4px solid #d4af37;
-
-    color: #fff;
+.avaliacao-container p {
+    color: #bbb;
+    margin-bottom: 15px;
 }
 
-.flash.success {
-    border-left-color: #28a745;
+.avaliacao-container a {
+    color: #d4af37;
 }
 
-.flash.error {
-    border-left-color: #dc3545;
-}
-
-.flash.warning {
-    border-left-color: #ffc107;
+.avaliacao-container form {
+    margin: 25px 0;
 }
 
 /* =========================================================
@@ -618,26 +720,20 @@ input[type="submit"]:hover {
 
 table {
     width: 100%;
-
     border-collapse: collapse;
-
     margin-top: 25px;
-
     background: #171717;
 }
 
 th,
 td {
     padding: 13px;
-
     text-align: left;
-
     border-bottom: 1px solid #292929;
 }
 
 th {
     background: #222;
-
     color: #d4af37;
 }
 
@@ -655,20 +751,50 @@ tr:hover {
 
 .footer {
     margin-top: 80px;
-
-    padding: 30px 20px;
-
+    padding: 40px 20px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
     text-align: center;
-
     background: #111;
-
     border-top: 1px solid #292929;
-
     color: #888;
 }
 
-.footer strong {
+.footer h3 {
     color: #d4af37;
+    margin-bottom: 5px;
+}
+
+.social {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}
+
+.social a {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #333;
+    border-radius: 50%;
+    color: #ddd;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.social a:hover {
+    background: #d4af37;
+    border-color: #d4af37;
+    color: #111;
+}
+
+.copyright {
+    font-size: 13px;
+    color: #666;
 }
 
 /* =========================================================
@@ -679,24 +805,23 @@ tr:hover {
 
     .header {
         flex-direction: column;
-
         gap: 15px;
-
         padding: 15px;
     }
 
     .nav {
         width: 100%;
-
         justify-content: center;
-
         flex-wrap: wrap;
-
         gap: 15px;
     }
 
     .hero h1 {
         font-size: 38px;
+    }
+
+    .hero h2 {
+        font-size: 20px;
     }
 
     .hero p {
@@ -707,17 +832,15 @@ tr:hover {
         font-size: 30px;
     }
 
-    .form-container,
-    .login-container {
-        width: 90%;
-
+    .login-container,
+    .cadastro-box,
+    .avaliacao-container {
         padding: 25px;
     }
 
     .painel-header {
         flex-direction: column;
-
-        gap: 15px;
+        align-items: flex-start;
     }
 }
 
@@ -753,5 +876,74 @@ tr:hover {
 
     .card {
         padding: 20px;
+    }
+
+    .tatuagem-card img,
+    .sem-imagem {
+        height: 240px;
+    }
+}
+
+/* =========================================================
+   PÁGINA DE DETALHE DA TATUAGEM
+   (fica no fim do arquivo para sobrescrever as regras do card
+   da listagem, inclusive a de 240px dos celulares pequenos)
+   ========================================================= */
+
+.tatuagem-detalhe {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+}
+
+.tatuagem-detalhe:hover {
+    transform: none;
+}
+
+.tatuagem-detalhe img {
+    width: 55%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+    background: #0f0f0f;
+}
+
+.tatuagem-detalhe .sem-imagem {
+    width: 55%;
+    height: 400px;
+}
+
+.tatuagem-detalhe .tatuagem-info {
+    flex: 1;
+    padding: 30px;
+}
+
+.tatuagem-detalhe .tatuagem-info h2 {
+    font-size: 28px;
+}
+
+.preco {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid #d4af37;
+    border-radius: 20px;
+    color: #d4af37;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .tatuagem-detalhe {
+        flex-direction: column;
+    }
+
+    .tatuagem-detalhe img,
+    .tatuagem-detalhe .sem-imagem {
+        width: 100%;
+    }
+
+    .tatuagem-detalhe .sem-imagem {
+        height: 240px;
     }
 }

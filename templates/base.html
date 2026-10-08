@@ -16,10 +16,7 @@
         {% endblock %}
     </title>
 
-    <link
-        
-        rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <link
         rel="stylesheet"
@@ -34,8 +31,7 @@
 
     <header class="header">
 
-        <a href="{{ url_for('painel') }}" class="logo">
-
+        <a href="{{ url_for('index') }}" class="logo">
 
             <i class="fa-solid fa-pen-nib"></i>
 
@@ -45,7 +41,7 @@
 
         <nav class="nav">
 
-            <a href="{{ url_for('painel') }}">
+            <a href="{{ url_for('index') }}">
                 Início
             </a>
 
@@ -54,6 +50,12 @@
             </a>
 
             {% if session.get('id_usuario') %}
+
+                {% if session.get('is_admin') %}
+                    <a href="{{ url_for('cadastrar_tattoo') }}">
+                        Cadastrar tatuagem
+                    </a>
+                {% endif %}
 
                 <a href="{{ url_for('painel') }}">
                     Painel

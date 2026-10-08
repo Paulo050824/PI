@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Catálogo de {{ tatuagem.nome }} - Silverio Tattoo.ink
+{% endblock %}
+
+{% block content %}
+
+<section class="tatuagens-page">
+
+    <div class="titulo-pagina">
+
+        <h1>Catálogo: {{ tatuagem.nome }}</h1>
+
+        <p>Confira as opções disponíveis e valores deste estilo de trabalho.</p>
+
+    </div>
+
+
+    {% if itens %}
+
+        <div class="tatuagens-grid">
+
+            {% for item in itens %}
+
+                <article class="tatuagem-card">
+
+                    {% if item.imagem %}
+                        <img
+                            src="{{ url_for('static', filename='img/' ~ item.imagem) }}"
+                            alt="{{ item.nome }}"
+                        >
+                    {% else %}
+                        <div class="sem-imagem">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                    {% endif %}
+
+                    <div class="tatuagem-info">
+
+                        <h2>{{ item.nome }}</h2>
+
+                        {% if item.descricao %}
+                            <p>{{ item.descricao }}</p>
+                        {% endif %}
+
+                        {% if item.preco is not none %}
+                            <span class="categoria">
+                                R$ {{ '%.2f'|format(item.preco)|replace('.', ',') }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="nenhuma-tatuagem">
+
+            <i class="fa-solid fa-pen-nib"></i>
+
+            <h2>Catálogo vazio</h2>
+
+            <p>Ainda não há itens cadastrados para este trabalho.</p>
+
+        </div>
+
+    {% endif %}
+
+
+    <p>
+        <a href="{{ url_for('tatuagens') }}" class="btn secundario">
+            Voltar para Tatuagens
+        </a>
+    </p>
+
+</section>
+
+{% endblock %}

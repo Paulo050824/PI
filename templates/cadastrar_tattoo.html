@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Cadastrar Tatuagem - Silverio Tattoo.ink
+{% endblock %}
+
+{% block content %}
+<div class="cadastro-container">
+    <div class="cadastro-box">
+        <h1>Cadastrar Nova Tatuagem</h1>
+        <p>Preencha os dados do trabalho realizado para adicionar ao portfólio</p>
+
+        {% if erro %}
+            <p class="erro">{{ erro }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('cadastrar_tattoo') }}">
+            <div class="campo">
+                <label for="nome">Nome da Tatuagem</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Leão Realista no Braço" required>
+            </div>
+
+            <div class="campo">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="4"
+                    placeholder="Descreva detalhes do estilo, tempo de sessão, etc."></textarea>
+            </div>
+
+            <div class="campo">
+                <label for="preco">Preço (R$)</label>
+                <input type="text" id="preco" name="preco" placeholder="Ex: 350,00" required>
+            </div>
+
+            <div class="campo">
+                <label for="tamanho">Tamanho (cm)</label>
+                <input type="text" id="tamanho" name="tamanho" placeholder="Ex: 15" required>
+            </div>
+
+            <div class="campo">
+                <label for="imagem">Nome do Arquivo da Imagem</label>
+                <input type="text" id="imagem" name="imagem" placeholder="Ex: leao.png">
+            </div>
+
+            <button type="submit">Cadastrar Tatuagem</button>
+        </form>
+
+        <div class="login-link">
+            <p><a href="{{ url_for('painel') }}">Voltar para o Painel</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

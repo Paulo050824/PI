@@ -104,6 +104,32 @@
         </div>
 
 
+        {% if usuario.is_admin %}
+
+        <div class="painel-card">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <h2>
+                Administração
+            </h2>
+
+            <p>
+                Adicione novos trabalhos ao portfólio.
+            </p>
+
+            <a
+                href="{{ url_for('cadastrar_tattoo') }}"
+                class="btn"
+            >
+                Cadastrar tatuagem
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
     </div>
 
 </section>

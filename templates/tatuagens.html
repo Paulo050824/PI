@@ -34,7 +34,7 @@
 
                         <img
                             src="{{ url_for('static', filename='img/' ~ tatuagem.imagem) }}"
-                            alt="{{ tatuagem.titulo }}"
+                            alt="{{ tatuagem.nome }}"
                         >
 
                     {% else %}
@@ -48,26 +48,34 @@
 
                     <div class="tatuagem-info">
 
-                        <h2>
-                            {{ tatuagem.titulo }}
-                        </h2>
+                        <h2>{{ tatuagem.nome }}</h2>
 
                         {% if tatuagem.descricao %}
-
-                            <p>
-                                {{ tatuagem.descricao }}
-                            </p>
-
+                            <p>{{ tatuagem.descricao }}</p>
                         {% endif %}
 
-                        {% if tatuagem.categoria %}
+                        <span class="categoria">
+                            R$ {{ '%.2f'|format(tatuagem.preco)|replace('.', ',') }}
+                        </span>
 
-                            <span class="categoria">
-                                {{ tatuagem.categoria }}
-                            </span>
+                        <span class="categoria">
+                            {{ tatuagem.tamanho }} cm
+                        </span>
 
-                        {% endif %}
+                        <a href="{{ url_for('listar_avaliacoes', id_tatuagem=tatuagem.id) }}" class="btn">
+                            Avaliações
+                        </a>
 
+                       <a href="{{ url_for('detalhe_tatuagem', id_tatuagem=tatuagem.id) }}" class="btn secundario">
+                        Ver detalhes
+                        </a>
+                        {% if session.get('is_admin') %}
+                     <form action="{{ url_for('excluir_tatuagem', id_tatuagem=tatuagem.id) }}"
+                     method="post"
+                        onsubmit="return confirm('Excluir esta tatuagem? Essa ação não pode ser desfeita.');">
+                     <button type="submit" class="btn secundario">Excluir</button>
+                     </form>
+{% endif %}
                     </div>
 
                 </article>

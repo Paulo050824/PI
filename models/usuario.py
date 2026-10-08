@@ -1,9 +1,10 @@
 class Usuario:
-    def __init__(self, nome, email, senha_hash, id=None):
+    def __init__(self, nome, email, senha_hash, id=None, is_admin=False):
         self._id = id
         self._nome = nome
         self._email = email
         self._senha_hash = senha_hash
+        self._is_admin = bool(is_admin)
 
     @property
     def id(self):
@@ -36,3 +37,11 @@ class Usuario:
     @senha_hash.setter
     def senha_hash(self, valor):
         self._senha_hash = valor
+
+    @property
+    def is_admin(self):
+        return self._is_admin
+
+    @is_admin.setter
+    def is_admin(self, valor):
+        self._is_admin = bool(valor)

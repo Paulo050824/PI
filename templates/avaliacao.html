@@ -1,21 +1,73 @@
-{% extends 'base.html'%}
+{% extends "base.html" %}
 
-{% block titulo %} Avaliações do {{Tatuagem.nome}} - Ifood2 {% endblock%}
+{% block title %}
+    Avaliações - Silverio Tattoo.ink
+{% endblock %}
 
-{% block conteudo %}
-    <h2>Avaliações de {{tatuagem.nome}}</h2>
-    <p>Média geral: <strong>{{ tatuagem.media_avaliacoes}}</strong></p>
+{% block content %}
+<section class="tatuagens-page">
 
-    {% if restaurante.avaliacoes%}
-    <ul>
-        {% for avaliacao in restaurante.avaliacoes %}
-        <li>{{avaliacao}}</li>
-        {% endfor %}
-    </ul>
+    <div class="titulo-pagina">
+        <h1>Avaliações</h1>
+
+        {% if tatuagem %}
+            <p>Avaliações da tatuagem: <strong>{{ tatuagem.nome }}</strong></p>
+        {% else %}
+            <p>Confira as avaliações registradas.</p>
+        {% endif %}
+
+        {% if session.get('id_usuario') and tatuagem %}
+            <a href="{{ url_for('avaliar_tatuagem', id_tatuagem=tatuagem.id) }}" class="btn">
+                <i class="fa-solid fa-star"></i> Avaliar esta tatuagem
+            </a>
+        {% endif %}
+    </div>
+
+    {% if avaliacoes %}
+
+        {% set media = (avaliacoes | sum(attribute='nota')) / (avaliacoes | length) %}
+
+        <div class="avaliacao-container">
+
+            <p>
+                Média das avaliações:
+                <span class="preco">{{ "%.1f"|format(media)|replace('.', ',') }} / 5,0</span>
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Nota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avaliacao in avaliacoes %}
+                        <tr>
+                            <td>{{ avaliacao.cliente }}</td>
+                            <td>{{ "%.1f"|format(avaliacao.nota)|replace('.', ',') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
     {% else %}
-    <p>Esta Tatuagem ainda não possui avaliacoes.</p>
+
+        <div class="nenhuma-tatuagem">
+            <i class="fa-solid fa-star"></i>
+            <h2>Sem avaliações</h2>
+            <p>Esta tatuagem ainda não possui avaliações.</p>
+        </div>
+
     {% endif %}
 
-    <p><a href="{{url_for('avaliar_tatuagem', id_tatuagem = tatuagens.id)}}"></a></p>
-    <p><a href="{{url_for('listar_cardapio', id_tatuagem = tatuagens.id)}}"></a></p>
-    {% endblock %}
+    <p>
+        <a href="{{ url_for('tatuagens') }}" class="btn secundario">
+            Voltar para Tatuagens
+        </a>
+    </p>
+
+</section>
+{% endblock %}

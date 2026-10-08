@@ -1,8 +1,10 @@
 from models.tatuagens.avaliacao import Avaliacao
 
+
 class Tatuagem:
-    def __init__(self, preco, tamanho, imagem, descricao, id=None):
+    def __init__(self, nome, preco, tamanho, imagem, descricao, id=None):
         self._id = id
+        self._nome = nome
         self._preco = float(preco)
         self._tamanho = float(tamanho)
         self._imagem = imagem
@@ -16,6 +18,14 @@ class Tatuagem:
     @id.setter
     def id(self, valor):
         self._id = valor
+
+    @property
+    def nome(self):
+        return self._nome
+
+    @nome.setter
+    def nome(self, valor):
+        self._nome = valor
 
     @property
     def preco(self):
