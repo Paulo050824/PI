@@ -1,12 +1,10 @@
-import os
 import sqlite3
+import os
 
-# O arquivo do banco fica na mesma pasta deste db.py (independe de onde o app é executado)
-CAMINHO_BANCO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "silveriotatooink.db")
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, '..', 'nome_do_seu_banco.db')
 
 def conectar():
-    conexao = sqlite3.connect(CAMINHO_BANCO)
-    # No SQLite as chaves estrangeiras vêm desligadas por padrão, é preciso ativar a cada conexão
-    conexao.execute("PRAGMA foreign_keys = ON")
+    conexao = sqlite3.connect(DB_PATH)
+    conexao.row_factory = sqlite3.Row
     return conexao

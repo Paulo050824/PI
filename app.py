@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 
 from models.tatuagens.avaliacao import Avaliacao
 from models.tatuagens.tatuagem import Tatuagem
@@ -14,6 +15,7 @@ from repositories import (
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'  # troque por uma chave longa e aleatória antes de publicar
+DATABASE = 'database.db'
 
 
 def login_required(funcao):
