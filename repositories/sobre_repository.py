@@ -7,6 +7,7 @@ def _linha_para_tatuagem(linha):
         id=linha[0],
         nome=linha[1],
         descricao=linha[2],
+        preco=linha[3],
         imagem=linha[4],
     )
 
@@ -20,6 +21,7 @@ def criar_tabela_tatuagens():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             descricao TEXT,
+            preco REAL,
             imagem TEXT
         )
     """
@@ -34,13 +36,14 @@ def criar_tatuagem(tatuagem):
     cursor = conexao.cursor()
 
     sql = """
-        INSERT INTO tatuagens (nome, descricao, imagem)
+        INSERT INTO tatuagens (nome, descricao, preco, imagem)
         VALUES (?, ?, ?, ?)
     """
 
     cursor.execute(sql, (
         tatuagem.nome,
         tatuagem.descricao,
+        tatuagem.preco,
         tatuagem.imagem,
     ))
 
@@ -53,7 +56,7 @@ def listar_tatuagens():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id, nome, descricao, imagem
+        SELECT id, nome, descricao, preco, imagem
         FROM tatuagens
         ORDER BY nome
     """)
@@ -69,7 +72,7 @@ def buscar_tatuagem(tatuagem_id):
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id, nome, descricao,  imagem
+        SELECT id, nome, descricao, preco, imagem
         FROM tatuagens
         WHERE id = ?
     """, (tatuagem_id,))

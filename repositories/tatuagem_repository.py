@@ -9,6 +9,7 @@ def criar_tabela_tatuagens():
         CREATE TABLE IF NOT EXISTS tatuagem(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
+            preco REAL NOT NULL,
             tamanho REAL NOT NULL,
             imagem TEXT,
             descricao TEXT
@@ -18,6 +19,7 @@ def criar_tabela_tatuagens():
     # Se a tabela já existia com colunas diferentes, adiciona as que faltam
     colunas = {
         'nome': "TEXT NOT NULL DEFAULT ''",
+        'preco': "REAL NOT NULL DEFAULT 0",
         'tamanho': "REAL NOT NULL DEFAULT 0",
         'imagem': "TEXT",
         'descricao': "TEXT",
@@ -40,10 +42,10 @@ def criar_tatuagem(tatuagem):
     cursor = conexao.cursor()
     cursor.execute(
         """
-        INSERT INTO tatuagem(nome,  tamanho, imagem, descricao)
+        INSERT INTO tatuagem(nome, preco, tamanho, imagem, descricao)
         VALUES (?, ?, ?, ?, ?)
         """,
-        (tatuagem.nome, tatuagem. tatuagem.tamanho,
+        (tatuagem.nome, tatuagem.preco, tatuagem.tamanho,
          tatuagem.imagem, tatuagem.descricao)
     )
     conexao.commit()
@@ -55,15 +57,15 @@ def criar_tatuagem(tatuagem):
 
 
 def _montar_tatuagem(linha):
-    id_t, nome, tamanho, imagem, descricao = linha
-    return Tatuagem(nome,  tamanho, imagem, descricao, id_t)
+    id_t, nome, preco, tamanho, imagem, descricao = linha
+    return Tatuagem(nome, preco, tamanho, imagem, descricao, id_t)
 
 
 def listar_tatuagens():
     conexao = conectar()
     cursor = conexao.cursor()
     cursor.execute(
-        "SELECT id, nome,  tamanho, imagem, descricao FROM tatuagem ORDER BY id DESC"
+        "SELECT id, nome, preco, tamanho, imagem, descricao FROM tatuagem ORDER BY id DESC"
     )
     linhas = cursor.fetchall()
     conexao.close()
@@ -75,7 +77,7 @@ def buscar_por_id(id_tatuagem):
     conexao = conectar()
     cursor = conexao.cursor()
     cursor.execute(
-        "SELECT id, nome,  tamanho, imagem, descricao FROM tatuagem WHERE id = ?",
+        "SELECT id, nome, preco, tamanho, imagem, descricao FROM tatuagem WHERE id = ?",
         (id_tatuagem,)
     )
     linha = cursor.fetchone()
