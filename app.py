@@ -138,7 +138,6 @@ def cadastrar_tattoo():
         try:
             nova_tatuagem = Tatuagem(
                 nome=request.form['nome'].strip(),
-                preco=float(request.form['preco'].replace(',', '.')),
                 tamanho=float(request.form['tamanho'].replace(',', '.')),
                 imagem=request.form.get('imagem', ''),
                 descricao=request.form.get('descricao', '')
