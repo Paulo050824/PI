@@ -77,19 +77,29 @@ def buscar_por_id(id_usuario):
     return _montar_usuario(resultado) if resultado else None
 # --- MÉTODOS DE REMOÇÃO ---
 
-def remover_avaliacao(id_avaliacao):
-    """Remove uma avaliação específica pelo seu ID."""
+def remover_avaliacao(id_avaliacao, id_usuario_logado):
+    """
+    Remove uma avaliação apenas se ela pertencer ao usuário logado.
+    Retorna True se removeu, False se não existe ou não é do usuário.
+    """
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        DELETE FROM avaliacoes
-        WHERE id = ?
-    """, (id_avaliacao,))
+    try:
+        cursor.execute("""
+            DELETE FROM avaliacoes
+            WHERE id = ? AND id_usuario = ?
+        """, (id_avaliacao, id_usuario_logado))
 
-    conexao.commit()
-    cursor.close()
-    conexao.close()
+        conexao.commit()
+        return cursor.rowcount > 0
+    finally:
+        cursor.close()
+        conexao.close()
+        if remover_avaliacao(id_avaliacao, id_usuario_logado):
+            print("Avaliação removida com sucesso.")
+        else:
+            print("Você não tem permissão para remover esta avaliação.")
 
 
 def remover_avaliacoes_por_tatuagem(id_tatuagem):
