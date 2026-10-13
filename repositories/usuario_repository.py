@@ -1,145 +1,77 @@
 from banco.db import conectar
-from models.tatuagens.avaliacao import Avaliacao
+from models.usuario import Usuario
 
 
-def _coluna_ja_existe(erro):
-    """True se o erro do MySQL for 'Duplicate column name' (código 1060)."""
-    return "1060" in str(erro) or "duplicate column" in str(erro).lower()
-
-
-def criar_tabela_avaliacoes():
+def criar_tabela_usuarios():
     conexao = conectar()
     cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS avaliacoes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                id_tatuagem INT NOT NULL,
-                cliente VARCHAR(150) NOT NULL,
-                nota DECIMAL(3,1) NOT NULL,
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuario(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            senha_hash TEXT NOT NULL,
+            is_admin INTEGER NOT NULL DEFAULT 0
+        )
+    """)
 
-                FOREIGN KEY (id_tatuagem)
-                REFERENCES tatuagem(id) ON DELETE CASCADE
-            )
-        """)
-        conexao.commit()
+    # Se a tabela já existia sem a coluna is_admin, adiciona
+    cursor.execute("PRAGMA table_info(usuario)")
+    colunas = [linha[1] for linha in cursor.fetchall()]
+    if "is_admin" not in colunas:
+        cursor.execute(
+            "ALTER TABLE usuario ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0"
+        )
 
-        # Se a tabela já existia sem a coluna id_usuario, adiciona
-        # (avaliações antigas ficam com NULL, ou seja, sem dono).
-        # Tenta o ALTER direto e ignora o erro "coluna já existe", sem
-        # depender de information_schema.
-        try:
-            cursor.execute("""
-                ALTER TABLE avaliacoes
-                ADD COLUMN id_usuario INT NULL
-                    REFERENCES usuario(id) ON DELETE SET NULL
-            """)
-            conexao.commit()
-        except Exception as erro:
-            if not _coluna_ja_existe(erro):
-                raise
-    finally:
-        cursor.close()
-        conexao.close()
+    conexao.commit()
+    conexao.close()
 
 
-def criar_avaliacao(id_tatuagem, avaliacao):
+def criar_usuario(usuario):
     conexao = conectar()
     cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            INSERT INTO avaliacoes (id_tatuagem, cliente, nota, id_usuario)
-            VALUES (%s, %s, %s, %s)
-        """, (id_tatuagem, avaliacao.cliente, avaliacao.nota, avaliacao.id_usuario))
-        conexao.commit()
-    finally:
-        cursor.close()
-        conexao.close()
+    # is_admin não é inserido: todo cadastro novo nasce com 0 (padrão do banco)
+    cursor.execute(
+        """
+        INSERT INTO usuario(nome, email, senha_hash)
+        VALUES (?, ?, ?)
+        """,
+        (usuario.nome, usuario.email, usuario.senha_hash)
+    )
+    conexao.commit()
+    id_gerado = cursor.lastrowid
+    conexao.close()
+
+    usuario.id = id_gerado
+    return id_gerado
 
 
-def listar_avaliacoes():
+def _montar_usuario(resultado):
+    id_usuario, nome, email, senha_hash, is_admin = resultado
+    return Usuario(nome, email, senha_hash, id_usuario, bool(is_admin))
+
+
+def buscar_por_email(email):
     conexao = conectar()
     cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            SELECT cliente, nota
-            FROM avaliacoes
-        """)
-        avaliacoes = cursor.fetchall()
-    finally:
-        cursor.close()
-        conexao.close()
+    cursor.execute(
+        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE email = ?",
+        (email,)
+    )
+    resultado = cursor.fetchone()
+    conexao.close()
 
-    return [
-        Avaliacao(cliente, float(nota))
-        for cliente, nota in avaliacoes
-    ]
+    return _montar_usuario(resultado) if resultado else None
 
 
-def listar_avaliacoes_por_tatuagem(id_tatuagem):
+def buscar_por_id(id_usuario):
     conexao = conectar()
     cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            SELECT id, cliente, nota, id_usuario
-            FROM avaliacoes
-            WHERE id_tatuagem = %s
-        """, (id_tatuagem,))
-        resultado = cursor.fetchall()
-    finally:
-        cursor.close()
-        conexao.close()
+    cursor.execute(
+        "SELECT id, nome, email, senha_hash, is_admin FROM usuario WHERE id = ?",
+        (id_usuario,)
+    )
+    resultado = cursor.fetchone()
+    conexao.close()
 
-    return [
-        Avaliacao(cliente, float(nota), id_avaliacao, id_usuario)
-        for id_avaliacao, cliente, nota, id_usuario in resultado
-    ]
-
-
-def listar_completo(id_tatuagem):
-    conexao = conectar()
-    cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            SELECT id, id_tatuagem, cliente, nota
-            FROM avaliacoes
-            WHERE id_tatuagem = %s
-        """, (id_tatuagem,))
-        resultado = cursor.fetchall()
-    finally:
-        cursor.close()
-        conexao.close()
-
-    return resultado
-
-
-# --- MÉTODOS DE REMOÇÃO ---
-
-def remover_avaliacao(id_avaliacao):
-    """Remove uma avaliação específica pelo seu ID."""
-    conexao = conectar()
-    cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            DELETE FROM avaliacoes
-            WHERE id = %s
-        """, (id_avaliacao,))
-        conexao.commit()
-    finally:
-        cursor.close()
-        conexao.close()
-
-
-def remover_avaliacoes_por_tatuagem(id_tatuagem):
-    """Remove todas as avaliações associadas a uma determinada tatuagem."""
-    conexao = conectar()
-    cursor = conexao.cursor()
-    try:
-        cursor.execute("""
-            DELETE FROM avaliacoes
-            WHERE id_tatuagem = %s
-        """, (id_tatuagem,))
-        conexao.commit()
-    finally:
-        cursor.close()
-        conexao.close()
+    return _montar_usuario(resultado) if resultado else None
