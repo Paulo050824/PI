@@ -1,6 +1,7 @@
 class Avaliacao:
-    def __init__(self, cliente, nota, id=None):
+    def __init__(self, cliente, nota, id=None, id_usuario=None):
         self._id = id
+        self._id_usuario = id_usuario
         self._cliente = cliente
         self._nota = float(nota)
 
@@ -27,3 +28,11 @@ class Avaliacao:
     @nota.setter
     def nota(self, valor):
         self._nota = float(valor)
+
+    @property
+    def id_usuario(self):
+        return self._id_usuario
+
+    @id_usuario.setter
+    def id_usuario(self, valor):
+        self._id_usuario = valor
