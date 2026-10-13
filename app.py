@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +14,29 @@ from repositories import (
 )
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'  # troque por uma chave longa e aleatória antes de publicar
+# Em produção, defina a variável de ambiente SECRET_KEY com um valor longo e aleatório.
+# O valor padrão abaixo serve só para desenvolvimento local.
+app.secret_key = os.environ.get('SECRET_KEY', 'chave-de-desenvolvimento-troque-em-producao')
+
+
+def inicializar_banco():
+    """Cria as tabelas verificando se os métodos existem nos repositórios."""
+    if hasattr(usuario_repository, 'criar_tabela_usuarios'):
+        usuario_repository.criar_tabela_usuarios()
+        
+    if hasattr(tatuagem_repository, 'criar_tabela_tatuagens'):
+        tatuagem_repository.criar_tabela_tatuagens()
+        
+    if hasattr(avaliacao_repository, 'criar_tabela_avaliacoes'):
+        avaliacao_repository.criar_tabela_avaliacoes()
+        
+    if hasattr(usuario_repository, 'criar_tabela_comentarios'):
+        usuario_repository.criar_tabela_comentarios()
+
+
+# Roda ao importar o app, assim as tabelas também são criadas quando o servidor
+# (ex.: PythonAnywhere/WSGI) carrega o arquivo, e não só com "python app.py".
+inicializar_banco()
 
 
 def login_required(funcao):
@@ -52,9 +75,15 @@ def index():
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     if request.method == 'POST':
-        nome = request.form['nome']
-        email = request.form['email']
-        senha = request.form['senha']
+        nome = request.form.get('nome', '').strip()
+        email = request.form.get('email', '').strip().lower()
+        senha = request.form.get('senha', '')
+
+        if not nome or not email or not senha:
+            return render_template(
+                'cadastro.html',
+                erro='Preencha nome, e-mail e senha.'
+            )
 
         # Verifica o e-mail antes de gastar processamento gerando o hash
         if usuario_repository.buscar_por_email(email) is not None:
@@ -76,8 +105,8 @@ def cadastro():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        senha = request.form['senha']
+        email = request.form.get('email', '').strip().lower()
+        senha = request.form.get('senha', '')
 
         usuario = usuario_repository.buscar_por_email(email)
         if usuario and check_password_hash(usuario.senha_hash, senha):
@@ -141,7 +170,7 @@ def cadastrar_tattoo():
                 imagem=request.form.get('imagem', ''),
                 descricao=request.form.get('descricao', '')
             )
-        except ValueError:
+        except (ValueError, KeyError):
             return render_template(
                 'cadastrar_tattoo.html',
                 erro='Preço e tamanho precisam ser números.'
@@ -162,7 +191,14 @@ def detalhe_tatuagem(id_tatuagem):
     if tatuagem is None:
         abort(404)
 
-    return render_template('tatuagem.html', tatuagem=tatuagem)
+    # Lista de dicts: id, id_usuario, nome, texto, criado_em
+    comentarios = usuario_repository.listar_comentarios_por_tatuagem(id_tatuagem)
+
+    return render_template(
+        'tatuagem.html',
+        tatuagem=tatuagem,
+        comentarios=comentarios
+    )
 
 
 # =========================
@@ -200,7 +236,7 @@ def avaliar_tatuagem(id_tatuagem):
 
         try:
             nota = float(request.form['nota'].replace(',', '.'))
-        except ValueError:
+        except (ValueError, KeyError):
             nota = None
 
         if nota is None or not 0 <= nota <= 5:
@@ -279,12 +315,26 @@ def comentar_tatuagem(id_tatuagem):
 
 
 # =========================
+# REMOVER COMENTÁRIO (SÓ O DONO)
+# =========================
+@app.route('/comentario/<int:id_comentario>/remover', methods=['POST'])
+@login_required
+def remover_comentario(id_comentario):
+    id_tatuagem = request.form.get('id_tatuagem', type=int)
+
+    if not usuario_repository.remover_comentario_do_usuario(
+        id_comentario, session['id_usuario']
+    ):
+        abort(403)  # não existe ou não é do usuário logado
+
+    if id_tatuagem:
+        return redirect(url_for('detalhe_tatuagem', id_tatuagem=id_tatuagem))
+    return redirect(url_for('tatuagens'))
+
+
+# =========================
 # EXECUÇÃO
 # =========================
 if __name__ == '__main__':
-    usuario_repository.criar_tabela_usuarios()
-    tatuagem_repository.criar_tabela_tatuagens()
-    avaliacao_repository.criar_tabela_avaliacoes()
-    usuario_repository.criar_tabela_comentarios()
-
-    app.run(debug=True)
+    # debug só liga se FLASK_DEBUG=1 (nunca deixe ligado em produção)
+    app.run(debug=os.environ.get('FLASK_DEBUG') == '1')
