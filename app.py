@@ -1,7 +1,6 @@
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3
 
 from models.tatuagens.avaliacao import Avaliacao
 from models.tatuagens.tatuagem import Tatuagem
@@ -15,7 +14,6 @@ from repositories import (
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'  # troque por uma chave longa e aleatória antes de publicar
-DATABASE = 'database.db'
 
 
 def login_required(funcao):
@@ -213,7 +211,7 @@ def avaliar_tatuagem(id_tatuagem):
                 erro='A nota precisa ser um número de 0 a 5.'
             )
 
-        avaliacao = Avaliacao(usuario.nome, nota)
+        avaliacao = Avaliacao(usuario.nome, nota, id_usuario=usuario.id)
         avaliacao_repository.criar_avaliacao(id_tatuagem, avaliacao)
 
         return redirect(url_for('listar_avaliacoes', id_tatuagem=id_tatuagem))
@@ -244,11 +242,49 @@ def listar_avaliacoes(id_tatuagem):
 
 
 # =========================
+# REMOVER AVALIAÇÃO (SÓ O DONO)
+# =========================
+@app.route('/avaliacao/<int:id_avaliacao>/remover', methods=['POST'])
+@login_required
+def remover_avaliacao(id_avaliacao):
+    id_tatuagem = request.form.get('id_tatuagem', type=int)
+
+    if not usuario_repository.remover_avaliacao_do_usuario(
+        id_avaliacao, session['id_usuario']
+    ):
+        abort(403)  # não existe ou não é do usuário logado
+
+    if id_tatuagem:
+        return redirect(url_for('listar_avaliacoes', id_tatuagem=id_tatuagem))
+    return redirect(url_for('tatuagens'))
+
+
+# =========================
+# DEIXAR COMENTÁRIO (PRIVADO)
+# =========================
+@app.route('/tatuagem/<int:id_tatuagem>/comentar', methods=['POST'])
+@login_required
+def comentar_tatuagem(id_tatuagem):
+    if tatuagem_repository.buscar_por_id(id_tatuagem) is None:
+        abort(404)
+
+    try:
+        usuario_repository.deixar_comentario(
+            session['id_usuario'], id_tatuagem, request.form.get('texto', '')
+        )
+    except ValueError:
+        pass  # texto vazio ou grande demais: simplesmente não salva
+
+    return redirect(url_for('detalhe_tatuagem', id_tatuagem=id_tatuagem))
+
+
+# =========================
 # EXECUÇÃO
 # =========================
 if __name__ == '__main__':
     usuario_repository.criar_tabela_usuarios()
     tatuagem_repository.criar_tabela_tatuagens()
     avaliacao_repository.criar_tabela_avaliacoes()
+    usuario_repository.criar_tabela_comentarios()
 
     app.run(debug=True)
