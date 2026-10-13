@@ -75,3 +75,33 @@ def buscar_por_id(id_usuario):
     conexao.close()
 
     return _montar_usuario(resultado) if resultado else None
+# --- MÉTODOS DE REMOÇÃO ---
+
+def remover_avaliacao(id_avaliacao):
+    """Remove uma avaliação específica pelo seu ID."""
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        DELETE FROM avaliacoes
+        WHERE id = ?
+    """, (id_avaliacao,))
+
+    conexao.commit()
+    cursor.close()
+    conexao.close()
+
+
+def remover_avaliacoes_por_tatuagem(id_tatuagem):
+    """Remove todas as avaliações associadas a uma determinada tatuagem."""
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        DELETE FROM avaliacoes
+        WHERE id_tatuagem = ?
+    """, (id_tatuagem,))
+
+    conexao.commit()
+    cursor.close()
+    conexao.close()
